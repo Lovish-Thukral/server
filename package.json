@@ -1,0 +1,16 @@
+{
+  "name": "myserver",
+  "version": "1.0.0",
+  "description": "this is the local server for testing phase",
+  "license": "ISC",
+  "author": "Lovish Thukral",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "express.js": "^1.0.0"
+  }
+}
