@@ -1,16 +1,17 @@
 {
-  "name": "myserver",
+  "name": "idverification",
   "version": "1.0.0",
-  "description": "this is the local server for testing phase",
+  "description": "",
   "license": "ISC",
-  "author": "Lovish Thukral",
+  "author": "",
   "type": "module",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "test": "node server.js"
+    "test": "nodemon index.js"
   },
   "dependencies": {
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "express.js": "^1.0.0"
+    "nodemon": "^3.1.10"
   }
 }
