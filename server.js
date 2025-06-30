@@ -1,6 +1,7 @@
 import express from 'express';
 import userrouter from './routes/user.router.js';
 import dbConnect from './config/databaseactivation.js';
+import dotenv from 'dotenv'
 
 
 
