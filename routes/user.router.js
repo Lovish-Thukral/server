@@ -1,18 +1,15 @@
 import { Router } from "express";
-import findusercontroller from "../controllers/finduser.controller.js";
-import addusercontroller from "../controllers/adduser.controller.js";
-import editusercontroller from "../controllers/edituser.controller.js";
-import deleteusercontroller from "../controllers/deleteuser.controller.js";
-
-const userrouter = Router();
+import { findUser, signupUser, loginUser } from '../controllers/user.controller.js';
 
 
-userrouter.get('/find/user', findusercontroller);
-userrouter.delete('/delete/user', deleteusercontroller);
-userrouter.post('/add/user', addusercontroller);
-userrouter.put('/edit/user', editusercontroller);
+const router = Router();
+
+router.get('/find', findUser);
+router.post('/signup', signupUser);
+router.post('/login', loginUser); 
 
 
 
 
-export default userrouter;
+
+export default router;

@@ -1,26 +1,23 @@
-import express from 'express';
-import userrouter from './routes/user.router.js';
-import dbConnect from './config/databaseactivation.js';
-import dotenv from 'dotenv'
+import express from'express';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import userRouter from './routes/user.router.js';
+import connectDB from './config/dbconfig.js';
 
-
-
-
-
-dotenv.config()
 const server = express();
 
+dotenv.config();
+server.use(cookieParser());
 server.use(express.json());
 
+connectDB();
+
 server.get('/', (req, res) => {
-    res.send(
-        'you are at root'
-    )
-})
+    res.send('Hello, World!');
+} );
 
-server.use('/api', userrouter)
+server.use('/api/user', userRouter)
 
-server.listen(4000, () => {
-    console.log(`server is running at http://localhost:4000`)
-    dbConnect(process.env.DB_URI);
-})
+server.listen(process.env.PORT || 8000, () => { 
+    console.log(`Server is running http://localhost:${process.env.PORT}`);
+});
