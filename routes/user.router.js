@@ -1,14 +1,20 @@
 import { Router } from "express";
-import { findUser, signupUser, loginUser } from '../controllers/user.controller.js';
+import { findUser, signupUser, loginUser, deleteUser, logoutuser, editUser } from '../controllers/user.controller.js';
+import middleauth from "../middleware/middle_auth.js";
+import protectedLogin from "../middleware/protectedLogin.js";
+import { postController } from "../controllers/UserPosts.controller.js";
 
 
 const router = Router();
 
-router.get('/find', findUser);
-router.post('/signup', signupUser);
-router.post('/login', loginUser); 
-
-
+router.post('/signup', protectedLogin, signupUser);
+router.post('/login', protectedLogin, loginUser); 
+router.put('/edit/:editToMake', middleauth, editUser);
+router.get('/getuser', middleauth ,findUser);
+router.delete('/delete', middleauth, deleteUser);
+router.post('/logout', middleauth, logoutuser);
+// router.get('/post/:postparams',  )
+router.put('/postUpload', middleauth, postController)
 
 
 
