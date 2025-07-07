@@ -1,42 +1,68 @@
 import postData from "../modules/post.module.js";
 import Userdata from "../modules/user.module.js";
 
-export const postController = async(req, res) => {
+export const postController = async (req, res) => {
     const curruntUser = req.user;
-    const { alt, description, location, image } = req.body;
-    
+    const image = req.file;
+    const { alt, description, location } = req.body;
+
     if (!image) {
         return res.status(400).json({ message: "invalid input" });
     }
 
-    
-    try {
-         const check = await Userdata.findById(curruntUser._id).select('username _id posts')
 
-        if (!check) return res.status(404).json({message : "invalid User"})
-        
+    try {
+        const check = await Userdata.findById(curruntUser._id).select('username _id posts')
+
+        if (!check) return res.status(404).json({ message: "invalid User" })
+
         const PostToUpload = new postData({
-            alt: alt || check.username, 
-            description : description || Date.now(),
+            alt: alt || check.username,
+            description: description || `${check.username}${Date.now()}`,
             location,
-            image : image
+            image: image.path
         })
 
         const checkUpload = await PostToUpload.save()
 
-        if (!checkUpload) return res.status(500).json({message: "unable to upload ! server error", status: "operation Failed"})    
-        
-         const addUserPost = await Userdata.findByIdAndUpdate(curruntUser._id, {
-            posts: [...check.posts, PostToUpload]
-        })
+        if (!checkUpload) return res.status(500).json({ message: "unable to upload ! server error", status: "operation Failed" })
 
-         if (!addUserPost) return res.status(500).json({Messsage : "Post Upload Failed at user DB", status : "operation Failed"})
+        const addUserPost = await Userdata.findByIdAndUpdate(curruntUser._id, {
+            posts: [...check.posts, PostToUpload._id]
+        }, { new: true })
 
-        res.status(200).json({message : "upload Successful", status : "operation Completed"})
+        if (!addUserPost) return res.status(500).json({ Messsage: "Post Upload Failed at user DB", status: "operation Failed" })
 
-        
+        res.status(200).json({
+            message: "upload Successful",
+            status: "operation Completed",
+            post: addUserPost.posts
+        });
+
+
     } catch (error) {
-        res.status(404).json({message : "something went wrong", error : error})
+        console.log(error)
+        res.status(404).json({ message: "something went wrong", error: error })
     }
 
+}
+
+export const viewpostController = async (req, res) => {
+    const { username } = req.body;
+    const checkUser = await Userdata.findOne({ username: username }).select('posts username _id');
+    if (!checkUser) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    const posts = checkUser.map();
+
+    res.status(200).json({
+        username: checkUser.username,
+        posts
+    });
+
+    // const posts = checkUser.posts.map((p) => {
+    //     console.log (Posts.findById(p).select('image'))
+    // });
+    // // console.log(posts)
 }
