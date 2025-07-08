@@ -1,10 +1,13 @@
 import postData from "../modules/post.module.js";
 import Userdata from "../modules/user.module.js";
 
+
+
+
 export const postController = async (req, res) => {
     const curruntUser = req.user;
-    const image = req.file;
-    const { alt, description, location } = req.body;
+    const image = req.file.path;
+    const {description, location } = req.body;
 
     if (!image) {
         return res.status(400).json({ message: "invalid input" });
@@ -17,10 +20,10 @@ export const postController = async (req, res) => {
         if (!check) return res.status(404).json({ message: "invalid User" })
 
         const PostToUpload = new postData({
-            alt: alt || check.username,
+            alt: req.file.originalname,
             description: description || `${check.username}${Date.now()}`,
             location,
-            image: image.path
+            image: image
         })
 
         const checkUpload = await PostToUpload.save()
@@ -54,15 +57,11 @@ export const viewpostController = async (req, res) => {
         return res.status(404).json({ message: "User not found" });
     }
 
-    const posts = checkUser.map();
+    // const fetchedPosts = await 
+
 
     res.status(200).json({
         username: checkUser.username,
-        posts
+        // fetchedPosts
     });
-
-    // const posts = checkUser.posts.map((p) => {
-    //     console.log (Posts.findById(p).select('image'))
-    // });
-    // // console.log(posts)
 }

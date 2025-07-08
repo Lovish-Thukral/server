@@ -16,7 +16,7 @@ const middleauth = async (req, res, next) => {
             return res.status(404).json({ message: "invalid token", status: "token error" });
         }
 
-        const user = await Userdata.findById(tokenvalidation.userid).select('-password -__v -mobile -email');
+        const user = await Userdata.findById(tokenvalidation.userid).select('_id username loginstatus');
 
         if (!user) {
             return res.status(404).json({ message: "invalid user! please login again", status: "middleware error" });
