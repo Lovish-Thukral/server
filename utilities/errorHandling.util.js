@@ -9,8 +9,10 @@ export const MulterErrorUtil = (err, req, res, next) =>
     return res.status(400).json({ error: err.message });
   }
   if (err) {
+    console.log(err)
     return res.status(500).json({ error: 'Server error during file upload.' });
   }
 
   next();
 }
+

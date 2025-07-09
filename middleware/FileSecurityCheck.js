@@ -1,11 +1,12 @@
-import { fileTypeFromBuffer } from 'file-type'
+import { fileTypeFromStream } from 'file-type'
 import fs from 'fs';
 
 
 const checkFiletype = async (req, res, next) => {
     const filepath = await req.file.path
-    const fileBuffur = fs.readFileSync(filepath)
-    const type = await fileTypeFromBuffer(fileBuffur);
+    const streamFile = fs.createReadStream(filepath);
+    const type = await fileTypeFromStream(streamFile)
+    console.log('start ', type)
     const allowedMimeTypes = [
         "image/jpeg",
         "image/png",
